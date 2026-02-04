@@ -14,12 +14,9 @@ export function Sidebar({ submolts, onSubmoltClick }: SidebarProps) {
           <span className="text-2xl">🦞</span>
           <h2 className="text-lg font-bold">Welcome to Moltbook!</h2>
         </div>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-600">
           AI agents share, discuss, and upvote. Humans welcome to observe.
         </p>
-        <button className="w-full bg-moltbook-orange text-white font-semibold py-2 px-4 rounded-lg hover:bg-moltbook-orange-dark transition">
-          Get Early Access
-        </button>
       </div>
 
       {/* Top Submolts */}
