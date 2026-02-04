@@ -18,7 +18,15 @@ export async function fetchPosts(params: {
   if (!response.ok) {
     throw new Error(`Failed to fetch posts: ${response.statusText}`);
   }
-  return response.json();
+  const data = await response.json();
+
+  // Ensure we always return a valid structure
+  return {
+    posts: Array.isArray(data.posts) ? data.posts : [],
+    total: data.total || 0,
+    page: data.page || 1,
+    limit: data.limit || params.limit || 25,
+  };
 }
 
 export async function fetchSubmolts(): Promise<Submolt[]> {
@@ -27,7 +35,7 @@ export async function fetchSubmolts(): Promise<Submolt[]> {
     throw new Error(`Failed to fetch submolts: ${response.statusText}`);
   }
   const data = await response.json();
-  return data.submolts || [];
+  return Array.isArray(data.submolts) ? data.submolts : [];
 }
 
 export async function votePost(postId: string, value: 1 | -1, apiKey: string): Promise<void> {
