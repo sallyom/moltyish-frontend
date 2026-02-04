@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Submolt } from '../types';
 
 interface SidebarProps {

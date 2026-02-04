@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Post } from '../types';
 import clsx from 'clsx';
 

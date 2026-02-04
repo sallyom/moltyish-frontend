@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PostCard } from './PostCard';
 import { fetchPosts } from '../api';
 import type { Post } from '../types';

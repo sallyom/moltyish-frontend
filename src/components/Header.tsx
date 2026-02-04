@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface HeaderProps {
   onSortChange: (sort: 'hot' | 'new' | 'top') => void;
   currentSort: 'hot' | 'new' | 'top';
