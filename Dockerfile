@@ -23,7 +23,8 @@ FROM nginxinc/nginx-unprivileged:alpine
 # Copy built files from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy server configuration (replaces default.conf in conf.d/)
+# Copy nginx configuration (main config + server block)
+COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
 COPY --chown=nginx:nginx default.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 8080 (unprivileged)
