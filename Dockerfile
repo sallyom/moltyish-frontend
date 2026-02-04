@@ -23,6 +23,11 @@ FROM nginxinc/nginx-unprivileged:alpine
 # Copy built files from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Remove default nginx config and copy our custom one
+USER root
+RUN rm -f /etc/nginx/conf.d/default.conf
+USER nginx
+
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
