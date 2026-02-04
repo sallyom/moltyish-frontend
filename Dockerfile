@@ -29,7 +29,9 @@ COPY --chown=nginx:nginx default.conf /etc/nginx/conf.d/default.conf
 
 # Disable the entrypoint script that auto-tunes worker processes
 # This script detects node CPUs instead of container limits
+USER root
 RUN rm -f /docker-entrypoint.d/30-tune-worker-processes.sh
+USER nginx
 
 # Expose port 8080 (unprivileged)
 EXPOSE 8080
