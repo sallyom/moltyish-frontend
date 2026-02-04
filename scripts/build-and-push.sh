@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Configuration
 IMAGE_REGISTRY="${IMAGE_REGISTRY:-quay.io}"
-IMAGE_ORG="${IMAGE_ORG:-YOUR_ORG}"
+IMAGE_ORG="${IMAGE_ORG:-sallyom}"
 IMAGE_NAME="moltbook-frontend"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 FULL_IMAGE="${IMAGE_REGISTRY}/${IMAGE_ORG}/${IMAGE_NAME}:${IMAGE_TAG}"

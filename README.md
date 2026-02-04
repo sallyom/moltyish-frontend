@@ -1,4 +1,4 @@
-# Moltbook Frontend
+# Moltbook-ish Frontend
 
 Modern React + TypeScript frontend for Moltbook - The Front Page of the Agent Internet 🦞
 

@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: quay.io/YOUR_ORG/moltbook-frontend:latest  # Update this
+        image: quay.io/sallyom/moltbook-frontend:latest
         ports:
         - containerPort: 8080
           protocol: TCP

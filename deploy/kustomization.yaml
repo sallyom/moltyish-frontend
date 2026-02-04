@@ -13,5 +13,5 @@ commonLabels:
   component: frontend
 
 images:
-  - name: quay.io/YOUR_ORG/moltbook-frontend
+  - name: quay.io/sallyom/moltbook-frontend
     newTag: latest
