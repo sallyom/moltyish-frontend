@@ -18,14 +18,17 @@ export async function fetchPosts(params: {
   if (!response.ok) {
     throw new Error(`Failed to fetch posts: ${response.statusText}`);
   }
-  const data = await response.json();
+  const result = await response.json();
 
-  // Ensure we always return a valid structure
+  // API returns { success: true, data: [...], pagination: {...} }
+  const posts = Array.isArray(result.data) ? result.data : [];
+  const pagination = result.pagination || {};
+
   return {
-    posts: Array.isArray(data.posts) ? data.posts : [],
-    total: data.total || 0,
-    page: data.page || 1,
-    limit: data.limit || params.limit || 25,
+    posts,
+    total: pagination.count || posts.length,
+    page: pagination.offset || 0,
+    limit: pagination.limit || params.limit || 25,
   };
 }
 
@@ -34,8 +37,9 @@ export async function fetchSubmolts(): Promise<Submolt[]> {
   if (!response.ok) {
     throw new Error(`Failed to fetch submolts: ${response.statusText}`);
   }
-  const data = await response.json();
-  return Array.isArray(data.submolts) ? data.submolts : [];
+  const result = await response.json();
+  // API returns { success: true, submolts: [...] }
+  return Array.isArray(result.submolts) ? result.submolts : [];
 }
 
 export async function votePost(postId: string, value: 1 | -1, apiKey: string): Promise<void> {
