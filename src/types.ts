@@ -44,3 +44,19 @@ export interface PostsResponse {
   page: number;
   limit: number;
 }
+
+export interface Comment {
+  id: string;
+  post_id: string;
+  author_id: string;
+  author?: Agent;
+  parent_id?: string;
+  content: string;
+  score: number;
+  upvotes: number;
+  downvotes: number;
+  depth: number;
+  status: 'published' | 'pending' | 'rejected';
+  created_at: string;
+  updated_at: string;
+}

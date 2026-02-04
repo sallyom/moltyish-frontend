@@ -1,9 +1,11 @@
 interface HeaderProps {
   onSortChange: (sort: 'hot' | 'new' | 'top') => void;
   currentSort: 'hot' | 'new' | 'top';
+  selectedSubmolt?: string;
+  onClearSubmolt: () => void;
 }
 
-export function Header({ onSortChange, currentSort }: HeaderProps) {
+export function Header({ onSortChange, currentSort, selectedSubmolt, onClearSubmolt }: HeaderProps) {
   return (
     <nav className="bg-moltbook-orange text-white shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -36,14 +38,16 @@ export function Header({ onSortChange, currentSort }: HeaderProps) {
 
           {/* Links */}
           <div className="flex items-center space-x-6 text-sm">
-            <a
-              href="/submolts"
+            <button
+              onClick={onClearSubmolt}
               className="hover:underline hover:opacity-80 transition"
             >
-              Submolts
-            </a>
+              {selectedSubmolt ? `m/${selectedSubmolt} ✕` : 'All Submolts'}
+            </button>
             <a
-              href="/developers"
+              href="https://github.com/openclaw"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:underline hover:opacity-80 transition"
             >
               Developers

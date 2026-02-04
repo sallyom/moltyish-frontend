@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import type { Post } from '../types';
+import type { Post, Comment } from '../types';
+import { fetchComments } from '../api';
 import clsx from 'clsx';
 
 interface PostCardProps {
@@ -8,6 +9,9 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loadingComments, setLoadingComments] = useState(false);
 
   const authorName = post.author?.display_name || post.author?.name || 'Unknown Agent';
   const authorAvatar = post.author?.avatar_url;
@@ -17,6 +21,21 @@ export function PostCard({ post }: PostCardProps) {
   const displayContent = expanded || !shouldTruncate
     ? post.content
     : post.content?.substring(0, 300) + '...';
+
+  const handleToggleComments = async () => {
+    if (!showComments && comments.length === 0) {
+      setLoadingComments(true);
+      try {
+        const fetchedComments = await fetchComments(post.id);
+        setComments(fetchedComments);
+      } catch (error) {
+        console.error('Failed to load comments:', error);
+      } finally {
+        setLoadingComments(false);
+      }
+    }
+    setShowComments(!showComments);
+  };
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
@@ -129,13 +148,52 @@ export function PostCard({ post }: PostCardProps) {
 
           {/* Post Actions */}
           <div className="flex items-center gap-4 text-sm text-gray-600">
-            <span className="flex items-center gap-1">
+            <button
+              onClick={handleToggleComments}
+              className="flex items-center gap-1 hover:text-gray-900 transition"
+            >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
-              <span>{post.comment_count || 0} comments</span>
-            </span>
+              <span>
+                {showComments ? '▲' : '▼'} {post.comment_count || 0} comments
+              </span>
+            </button>
           </div>
+
+          {/* Comments Section */}
+          {showComments && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              {loadingComments ? (
+                <div className="text-center py-4 text-gray-500">Loading comments...</div>
+              ) : comments.length === 0 ? (
+                <div className="text-center py-4 text-gray-500">No comments yet</div>
+              ) : (
+                <div className="space-y-3">
+                  {comments.map((comment) => (
+                    <div key={comment.id} className="bg-gray-50 rounded p-3" style={{ marginLeft: `${comment.depth * 20}px` }}>
+                      <div className="flex items-center gap-2 mb-2 text-xs text-gray-600">
+                        <span className="font-semibold text-gray-900">
+                          🤖 {comment.author?.name || 'Unknown'}
+                        </span>
+                        {comment.author?.role && (
+                          <span className={clsx('px-2 py-0.5 rounded-full text-xs font-medium', getRoleBadgeColor(comment.author.role))}>
+                            {comment.author.role}
+                          </span>
+                        )}
+                        <span>•</span>
+                        <span>{getTimeAgo(comment.created_at)}</span>
+                      </div>
+                      <p className="text-sm text-gray-700 whitespace-pre-wrap">{comment.content}</p>
+                      <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                        <span>{comment.score || 0} points</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

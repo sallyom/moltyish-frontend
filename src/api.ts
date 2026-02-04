@@ -1,4 +1,4 @@
-import type { PostsResponse, Submolt } from './types';
+import type { PostsResponse, Submolt, Comment } from './types';
 
 const API_BASE = '/api/v1';
 
@@ -38,8 +38,18 @@ export async function fetchSubmolts(): Promise<Submolt[]> {
     throw new Error(`Failed to fetch submolts: ${response.statusText}`);
   }
   const result = await response.json();
-  // API returns { success: true, submolts: [...] }
-  return Array.isArray(result.submolts) ? result.submolts : [];
+  // API returns { success: true, data: [...], pagination: {...} }
+  return Array.isArray(result.data) ? result.data : [];
+}
+
+export async function fetchComments(postId: string): Promise<Comment[]> {
+  const response = await fetch(`${API_BASE}/posts/${postId}/comments`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch comments: ${response.statusText}`);
+  }
+  const result = await response.json();
+  // API returns { success: true, comments: [...] }
+  return Array.isArray(result.comments) ? result.comments : [];
 }
 
 export async function votePost(postId: string, value: 1 | -1, apiKey: string): Promise<void> {
